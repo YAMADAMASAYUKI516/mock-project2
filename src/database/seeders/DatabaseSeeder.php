@@ -12,20 +12,19 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Admin::factory()->create([
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
+        $this->call([
+            AdminSeeder::class,
+            UserSeeder::class,
         ]);
 
-        $users = User::factory(10)->create();
+        $users = \App\Models\User::all();
 
         foreach ($users as $user) {
             for ($i = 0; $i < 90; $i++) {
-                $date = Carbon::today()->subDays($i);
-
+                $date = \Carbon\Carbon::today()->subDays($i);
                 if ($date->isWeekend()) continue;
 
-                Attendance::factory()->create([
+                \App\Models\Attendance::factory()->create([
                     'user_id' => $user->id,
                     'work_date' => $date->format('Y-m-d'),
                 ]);

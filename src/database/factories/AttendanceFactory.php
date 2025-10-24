@@ -10,11 +10,13 @@ class AttendanceFactory extends Factory
     public function definition(): array
     {
         $start = $this->faker->dateTimeBetween('09:00', '10:00');
-
         $end = (clone $start)->modify('+8 hours');
 
-        $breakStart = (clone $start)->modify('+3 hours');
-        $breakEnd = (clone $breakStart)->modify('+1 hour');
+        $break1Start = (clone $start)->modify('+3 hours');
+        $break1End = (clone $break1Start)->modify('+1 hour');
+
+        $break2Start = (clone $break1End)->modify('+2 hours');
+        $break2End = (clone $break2Start)->modify('+30 minutes');
 
         $notes = [
             null,
@@ -30,8 +32,12 @@ class AttendanceFactory extends Factory
             'work_date' => $this->faker->dateTimeBetween('-3 months', 'now')->format('Y-m-d'),
             'start_time' => $start->format('H:i:s'),
             'end_time' => $end->format('H:i:s'),
-            'break_start' => $breakStart->format('H:i:s'),
-            'break_end' => $breakEnd->format('H:i:s'),
+
+            'break1_start' => $break1Start->format('H:i:s'),
+            'break1_end' => $break1End->format('H:i:s'),
+            'break2_start' => $break2Start->format('H:i:s'),
+            'break2_end' => $break2End->format('H:i:s'),
+
             'total_work_time' => 8.00,
             'note' => $this->faker->randomElement($notes),
         ];

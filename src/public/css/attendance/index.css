@@ -1,33 +1,34 @@
 .attendance {
     background-color: #f0f0f0;
     min-height: 100vh;
-    padding-top: 80px;
+    padding-top: 150px;
     text-align: center;
     font-family: sans-serif;
 }
 
 .attendance__status {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .attendance__status-label {
     display: inline-block;
-    background-color: #ccc;
-    color: #333;
-    font-size: 14px;
+    background-color: #C8C8C8;
+    color: #696969;
+    font-weight: bold;
+    font-size: 18px;
     padding: 5px 14px;
-    border-radius: 20px;
+    border-radius: 50px;
 }
 
 .attendance__date {
-    font-size: 22px;
-    margin-bottom: 10px;
+    font-size: 40px;
+    margin-bottom: 30px;
 }
 
 .attendance__time {
-    font-size: 60px;
+    font-size: 80px;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 80px;
 }
 
 .attendance__buttons {
@@ -38,7 +39,7 @@
 }
 
 .attendance__button {
-    font-size: 20px;
+    font-size: 32px;
     font-weight: bold;
     border: none;
     border-radius: 12px;
@@ -49,25 +50,25 @@
 }
 
 .attendance__button--start {
-    background-color: #000;
-    color: #fff;
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
 .attendance__button--end {
-    background-color: #000;
-    color: #fff;
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
 .attendance__button--break-start {
-    background-color: #fff;
-    color: #000;
-    border: 2px solid #000;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
 }
 
 .attendance__button--break-end {
-    background-color: #fff;
-    color: #000;
-    border: 2px solid #000;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
 }
 
 .attendance__button:hover {

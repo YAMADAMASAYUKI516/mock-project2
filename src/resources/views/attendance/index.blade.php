@@ -21,7 +21,7 @@
 
     {{-- 日付と時刻 --}}
     <div class="attendance__date">{{ $date }}</div>
-    <div class="attendance__time">{{ $time }}</div>
+    <div class="attendance__time" id="clock">{{ $time }}</div>
 
     {{-- 勤怠ボタンエリア --}}
     <div class="attendance__buttons">
@@ -52,4 +52,19 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const timeString = `${hours}:${minutes}`;
+        document.getElementById('clock').textContent = timeString;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
 @endsection

@@ -19,8 +19,10 @@ class CreateAttendancesTable extends Migration
             $table->date('work_date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->time('break_start')->nullable();
-            $table->time('break_end')->nullable();
+            $table->time('break1_start')->nullable();
+            $table->time('break1_end')->nullable();
+            $table->time('break2_start')->nullable();
+            $table->time('break2_end')->nullable();
             $table->decimal('total_work_time', 4, 2)->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
