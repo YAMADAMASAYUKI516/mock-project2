@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $users = \App\Models\User::all();
 
         foreach ($users as $user) {
-            for ($i = 0; $i < 90; $i++) {
+            for ($i = 1; $i < 91; $i++) {
                 $date = \Carbon\Carbon::today()->subDays($i);
                 if ($date->isWeekend()) continue;
 

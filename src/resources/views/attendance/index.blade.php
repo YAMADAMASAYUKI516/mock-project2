@@ -6,17 +6,10 @@
 
 @section('content')
 <div class="attendance">
+
     {{-- 勤務状況バッジ --}}
     <div class="attendance__status">
-        @if ($status === '勤務外')
-            <span class="attendance__status-label">勤務外</span>
-        @elseif ($status === '出勤中')
-            <span class="attendance__status-label">出勤中</span>
-        @elseif ($status === '休憩中')
-            <span class="attendance__status-label">休憩中</span>
-        @elseif ($status === '退勤済み')
-            <span class="attendance__status-label">退勤済み</span>
-        @endif
+        <span class="attendance__status-label">{{ $status }}</span>
     </div>
 
     {{-- 日付と時刻 --}}
@@ -25,31 +18,32 @@
 
     {{-- 勤怠ボタンエリア --}}
     <div class="attendance__buttons">
-        @if ($status === '勤務外')
-            <form action="{{ route('attendance.start') }}" method="POST">
-                @csrf
-                <button type="submit" class="attendance__button attendance__button--start">出勤</button>
-            </form>
+        @switch($status)
+            @case('勤務外')
+                <form method="POST" action="{{ route('attendance.start') }}">@csrf
+                    <button type="submit" class="attendance__button attendance__button--start">出勤</button>
+                </form>
+                @break
 
-        @elseif ($status === '出勤中')
-            <form action="{{ route('attendance.end') }}" method="POST">
-                @csrf
-                <button type="submit" class="attendance__button attendance__button--end">退勤</button>
-            </form>
-            <form action="{{ route('attendance.break.start') }}" method="POST">
-                @csrf
-                <button type="submit" class="attendance__button attendance__button--break-start">休憩入</button>
-            </form>
+            @case('出勤中')
+                <form method="POST" action="{{ route('attendance.end') }}">@csrf
+                    <button type="submit" class="attendance__button attendance__button--end">退勤</button>
+                </form>
+                <form method="POST" action="{{ route('attendance.break.start') }}">@csrf
+                    <button type="submit" class="attendance__button attendance__button--break-start">休憩入</button>
+                </form>
+                @break
 
-        @elseif ($status === '休憩中')
-            <form action="{{ route('attendance.break.end') }}" method="POST">
-                @csrf
-                <button type="submit" class="attendance__button attendance__button--break-end">休憩戻</button>
-            </form>
+            @case('休憩中')
+                <form method="POST" action="{{ route('attendance.break.end') }}">@csrf
+                    <button type="submit" class="attendance__button attendance__button--break-end">休憩戻</button>
+                </form>
+                @break
 
-        @elseif ($status === '退勤済み')
-            <div class="attendance__message">お疲れ様でした。</div>
-        @endif
+            @case('退勤済')
+                <div class="attendance__message">お疲れ様でした。</div>
+                @break
+        @endswitch
     </div>
 </div>
 @endsection
@@ -60,11 +54,12 @@
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        const timeString = `${hours}:${minutes}`;
-        document.getElementById('clock').textContent = timeString;
+        document.getElementById('clock').textContent = `${hours}:${minutes}`;
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
+    document.addEventListener('DOMContentLoaded', () => {
+        updateClock();
+        setInterval(updateClock, 1000);
+    });
 </script>
 @endsection
