@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('list', [AttendanceController::class, 'list'])->name('list');
         Route::get('detail/{id}', [AttendanceController::class, 'detail'])->name('detail');
         Route::get('detail', [AttendanceController::class, 'detailByDate'])->name('detail_by_date');
-        Route::get('detail/{id}', [AttendanceController::class, 'detail'])->name('detail');
+        Route::post('request/{id}', [AttendanceController::class, 'request'])->name('request');
     });
 
     Route::get('/request/list', [RequestController::class, 'list'])->name('request.list');

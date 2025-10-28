@@ -33,9 +33,6 @@
     </header>
 
     <main>
-        <div class="common__heading">
-            @yield('title')
-        </div>
         @yield('content')
     </main>
     @yield('js')

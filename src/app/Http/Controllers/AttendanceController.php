@@ -53,7 +53,6 @@ class AttendanceController extends Controller
         if ($attendance && !$attendance->end_time) {
             $attendance->end_time = now();
 
-            // 勤務時間計算
             $workDuration = Carbon::parse($attendance->start_time)->diffInMinutes(now());
             $breakDuration = 0;
 
@@ -184,7 +183,8 @@ class AttendanceController extends Controller
         return view('attendance.list', [
             'attendances' => $attendances,
             'datesInMonth' => $datesInMonth,
-            'currentMonth' => Carbon::parse($currentMonth . '-01')->format('Y年m月'),
+            'currentMonthDisplay' => Carbon::parse($currentMonth . '-01')->format('Y/m'),
+            'currentMonthValue' => $currentMonth,
             'prevMonth' => $prevMonth,
             'nextMonth' => $nextMonth,
         ]);
@@ -209,5 +209,32 @@ class AttendanceController extends Controller
             ->first();
 
         return view('attendance.detail', compact('attendance', 'date'));
+    }
+
+    public function show($id)
+    {
+        $attendance = Attendance::with('user')->findOrFail($id);
+
+        foreach (['work_date', 'start_time', 'end_time', 'break1_start', 'break1_end', 'break2_start', 'break2_end'] as $field) {
+            if (!empty($attendance->$field)) {
+                $attendance->$field = \Carbon\Carbon::parse($attendance->$field);
+            }
+        }
+
+        return view('attendance.detail', compact('attendance'));
+    }
+
+    public function request($id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        if ($attendance->status === 'pending') {
+            return redirect()->route('attendance.detail', $id)->with('message', 'すでに承認申請中です。');
+        }
+
+        $attendance->status = 'pending';
+        $attendance->save();
+
+        return redirect()->route('attendance.detail', $id)->with('message', '修正申請が送信されました。');
     }
 }
