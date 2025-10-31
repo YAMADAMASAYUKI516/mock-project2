@@ -17,10 +17,16 @@ class CreateRequestsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('attendance_id')->constrained()->onDelete('cascade');
-            $table->text('reason');
-            $table->dateTime('requested_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->dateTime('approved_at')->nullable();
-            $table->enum('status', ['pending', 'approved'])->default('pending');
+
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->time('break1_start')->nullable();
+            $table->time('break1_end')->nullable();
+            $table->time('break2_start')->nullable();
+            $table->time('break2_end')->nullable();
+            $table->text('note')->nullable();
+
+            $table->enum('status', ['pending', 'approved'])->default('approved');
             $table->timestamps();
         });
     }

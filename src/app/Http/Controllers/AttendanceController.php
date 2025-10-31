@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use App\Models\Request as AttendanceRequest;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -192,49 +193,50 @@ class AttendanceController extends Controller
 
     public function detail($id)
     {
-        $attendance = Attendance::findOrFail($id);
-        return view('attendance.detail', compact('attendance'));
-    }
-
-    public function detailByDate(Request $request)
-    {
-        $date = $request->query('date');
-
-        if (!$date) {
-            abort(404);
-        }
-
-        $attendance = Attendance::where('user_id', Auth::id())
-            ->whereDate('work_date', $date)
-            ->first();
-
-        return view('attendance.detail', compact('attendance', 'date'));
-    }
-
-    public function show($id)
-    {
         $attendance = Attendance::with('user')->findOrFail($id);
 
-        foreach (['work_date', 'start_time', 'end_time', 'break1_start', 'break1_end', 'break2_start', 'break2_end'] as $field) {
+        $requestData = AttendanceRequest::where('attendance_id', $attendance->id)->first();
+
+        $isEditable = !$requestData || $requestData->status === 'approved';
+
+        $fields = [
+            'work_date', 'start_time', 'end_time',
+            'break1_start', 'break1_end', 'break2_start', 'break2_end',
+        ];
+
+        foreach ($fields as $field) {
             if (!empty($attendance->$field)) {
-                $attendance->$field = \Carbon\Carbon::parse($attendance->$field);
+                $attendance->$field = Carbon::parse($attendance->$field);
+            } else {
+                $attendance->$field = null;
             }
         }
 
-        return view('attendance.detail', compact('attendance'));
+        return view('attendance.detail', compact('attendance', 'requestData', 'isEditable'));
     }
 
-    public function request($id)
+    public function request(Request $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
-        if ($attendance->status === 'pending') {
-            return redirect()->route('attendance.detail', $id)->with('message', 'すでに承認申請中です。');
-        }
+        $validated = $request->validate([
+            'start_time'   => 'nullable|date_format:H:i',
+            'end_time'     => 'nullable|date_format:H:i',
+            'break1_start' => 'nullable|date_format:H:i',
+            'break1_end'   => 'nullable|date_format:H:i',
+            'break2_start' => 'nullable|date_format:H:i',
+            'break2_end'   => 'nullable|date_format:H:i',
+            'note'         => 'nullable|string',
+        ]);
 
-        $attendance->status = 'pending';
-        $attendance->save();
+        AttendanceRequest::updateOrCreate(
+            ['attendance_id' => $attendance->id],
+            array_merge($validated, [
+                'user_id'      => Auth::id(),
+                'status'       => 'pending',
+            ])
+        );
 
-        return redirect()->route('attendance.detail', $id)->with('message', '修正申請が送信されました。');
+        return redirect()->route('attendance.detail', $attendance->id);
     }
 }
