@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\Request as AttendanceRequest;
+use App\Http\Requests\AttendanceRequest as AttendanceFormRequest;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -14,18 +15,21 @@ class AttendanceController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $today = now()->toDateString();
+        $today = now();
 
         $attendance = Attendance::where('user_id', $user->id)
-            ->whereDate('work_date', $today)
+            ->whereDate('work_date', $today->toDateString())
             ->first();
 
         $status = $this->determineStatus($attendance);
 
+        $weekdayMap = ['日', '月', '火', '水', '木', '金', '土'];
+        $weekday = $weekdayMap[$today->dayOfWeek];
+
         return view('attendance.index', [
             'status' => $status,
-            'date' => now()->format('Y年m月d日'),
-            'time' => now()->format('H:i'),
+            'date' => $today->format('Y年m月d日') . "({$weekday})",
+            'time' => $today->format('H:i'),
         ]);
     }
 
@@ -215,25 +219,17 @@ class AttendanceController extends Controller
         return view('attendance.detail', compact('attendance', 'requestData', 'isEditable'));
     }
 
-    public function request(Request $request, $id)
+    public function request(AttendanceFormRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
-        $validated = $request->validate([
-            'start_time'   => 'nullable|date_format:H:i',
-            'end_time'     => 'nullable|date_format:H:i',
-            'break1_start' => 'nullable|date_format:H:i',
-            'break1_end'   => 'nullable|date_format:H:i',
-            'break2_start' => 'nullable|date_format:H:i',
-            'break2_end'   => 'nullable|date_format:H:i',
-            'note'         => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         AttendanceRequest::updateOrCreate(
             ['attendance_id' => $attendance->id],
             array_merge($validated, [
-                'user_id'      => Auth::id(),
-                'status'       => 'pending',
+                'user_id' => Auth::id(),
+                'status'  => 'pending',
             ])
         );
 

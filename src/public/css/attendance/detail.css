@@ -149,3 +149,9 @@
     width: 100%;
     box-sizing: border-box;
 }
+
+.attendance-detail__error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}

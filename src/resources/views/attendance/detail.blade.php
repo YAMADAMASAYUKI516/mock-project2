@@ -39,6 +39,9 @@
                             value="{{ old('start_time', $requestData->start_time ?? $attendance->start_time?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('start_time')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->start_time?->format('H:i') ?? '' }}</span>
                     @endif
@@ -50,6 +53,9 @@
                             value="{{ old('end_time', $requestData->end_time ?? $attendance->end_time?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('end_time')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->end_time?->format('H:i') ?? '' }}</span>
                     @endif
@@ -66,6 +72,9 @@
                             value="{{ old('break1_start', $requestData->break1_start ?? $attendance->break1_start?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('break1_start')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->break1_start?->format('H:i') ?? '' }}</span>
                     @endif
@@ -77,6 +86,9 @@
                             value="{{ old('break1_end', $requestData->break1_end ?? $attendance->break1_end?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('break1_end')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->break1_end?->format('H:i') ?? '' }}</span>
                     @endif
@@ -94,6 +106,9 @@
                             value="{{ old('break2_start', $requestData->break2_start ?? $attendance->break2_start?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('break2_start')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->break2_start?->format('H:i') ?? '' }}</span>
                     @endif
@@ -105,6 +120,9 @@
                             value="{{ old('break2_end', $requestData->break2_end ?? $attendance->break2_end?->format('H:i')) }}"
                             pattern="^([01]\d|2[0-3]):[0-5]\d$"
                             inputmode="numeric">
+                        @error('break2_end')
+                            <div class="attendance-detail__error">{{ $message }}</div>
+                        @enderror
                     @else
                         <span>{{ $attendance->break2_end?->format('H:i') ?? '' }}</span>
                     @endif
@@ -127,6 +145,9 @@
                             </div>
                         @endif
                     </div>
+                    @error('note')
+                        <div class="attendance-detail__error">{{ $message }}</div>
+                    @enderror
                 </td>
             </tr>
         </table>
