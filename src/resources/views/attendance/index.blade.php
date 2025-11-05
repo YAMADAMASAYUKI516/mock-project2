@@ -7,16 +7,13 @@
 @section('content')
 <div class="attendance">
 
-    {{-- 勤務状況バッジ --}}
     <div class="attendance__status">
         <span class="attendance__status-label">{{ $status }}</span>
     </div>
 
-    {{-- 日付と時刻 --}}
     <div class="attendance__date">{{ $date }}</div>
     <div class="attendance__time" id="clock">{{ $time }}</div>
 
-    {{-- 勤怠ボタンエリア --}}
     <div class="attendance__buttons">
         @switch($status)
             @case('勤務外')

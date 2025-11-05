@@ -20,10 +20,6 @@
     overflow: hidden;
 }
 
-.attendance-detail__table td:last-child {
-    padding-right: 200px;
-}
-
 .attendance-detail__table th,
 .attendance-detail__table td {
     padding: 16px;
@@ -31,14 +27,14 @@
     font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
-    text-align: left;
-    border-bottom: 2px solid #E1E1E1;
     letter-spacing: 0.2em;
+    border-bottom: 2px solid #E1E1E1;
 }
 
 .attendance-detail__table th {
     width: 30%;
     color: #737373;
+    text-align: left;
     padding-left: 50px;
 }
 
@@ -46,8 +42,11 @@
     text-align: center;
 }
 
-.attendance-detail__table input[type="text"],
-.attendance-detail__table textarea {
+.attendance-detail__table td:last-child {
+    padding-right: 200px;
+}
+
+.attendance-detail__table input[type="text"] {
     width: 103px;
     padding: 6px 12px;
     font-size: 16px;
@@ -55,55 +54,30 @@
     border: 1px solid #E1E1E1;
     border-radius: 4px;
     background-color: #FFFFFF;
-}
-
-.attendance-detail__table input[type="text"] {
     text-align: center;
 }
 
 .attendance-detail__table textarea {
-    resize: none;
     width: 340px;
     height: 72px;
-}
-
-.attendance-detail__submit-button {
-    display: inline-block;
-    margin-top: 30px;
-    margin-left: auto;
-    background-color: #000000;
-    color: #FFFFFF;
-    font-size: 22px;
-    font-weight: bold;
-    border: none;
-    padding: 12px 48px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.attendance-detail__submit-wrapper {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.attendance-detail__notice {
-    margin-top: 24px;
-    text-align: right;
-    color: #FF000080;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 0.2em;
-}
-
-.attendance-detail__text-note {
+    padding: 6px 12px;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    resize: none;
+    background-color: #FFFFFF;
+    text-align: left;
+}
+
+.attendance-detail__text-note-full {
+    font-size: 14px;
+    font-weight: bold;
     line-height: 1.6;
     text-align: left;
-    margin: 0;
     padding: 6px 12px;
-    white-space: pre-wrap;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .attendance-detail__span {
@@ -139,15 +113,31 @@
     box-sizing: border-box;
 }
 
-.attendance-detail__text-note-full {
-    grid-column: 1 / 4;
-    font-size: 14px;
+.attendance-detail__submit-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.attendance-detail__submit-button {
+    margin-top: 30px;
+    margin-left: auto;
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 22px;
     font-weight: bold;
-    line-height: 1.6;
-    text-align: left;
-    padding: 6px 12px;
-    width: 100%;
-    box-sizing: border-box;
+    border: none;
+    padding: 12px 48px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.attendance-detail__notice {
+    margin-top: 24px;
+    text-align: right;
+    color: #FF000080;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.2em;
 }
 
 .attendance-detail__error {

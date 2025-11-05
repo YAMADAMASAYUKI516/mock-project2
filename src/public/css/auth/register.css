@@ -1,3 +1,7 @@
+body {
+    background-color: #FFFFFF;
+}
+
 .register {
     max-width: 680px;
     margin: 80px auto;

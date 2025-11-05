@@ -19,8 +19,8 @@
                 <img src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </p>
 
-            @if (Request::is('login') || Request::is('register')  || Request::is('email/verify') || Request::is('admin/login'))
-                {{-- ログイン・登録画面ではロゴのみ --}}
+            @if (Request::is('login') || Request::is('register') || Request::is('email/verify') || Request::is('admin/login'))
+                {{-- ログイン・登録・メール認証・管理者ログイン画面ではロゴのみ --}}
             @else
                 {{-- ユーザータイプでナビゲーションを切り替え --}}
                 @if (Auth::guard('admin')->check())
@@ -35,6 +35,7 @@
     <main>
         @yield('content')
     </main>
+
     @yield('js')
 </body>
 

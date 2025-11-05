@@ -20,7 +20,6 @@
             認証はこちらから
         </a>
 
-
         <form class="verify__resend-form" method="POST" action="{{ route('verification.resend') }}">
             @csrf
             <button type="submit" class="verify__resend-link">認証メールを再送する</button>

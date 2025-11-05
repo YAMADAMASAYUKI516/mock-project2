@@ -92,7 +92,7 @@
     color: #737373;
 }
 
-.attendance-list thead {
+.attendance-list__table thead {
     border-bottom: 3px solid #E1E1E1;
 }
 

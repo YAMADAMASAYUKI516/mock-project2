@@ -13,9 +13,15 @@ class Request extends Model
     protected $fillable = [
         'user_id',
         'attendance_id',
-        'reason',
-        'requested_at',
-        'approved_at',
+        'requested_date',
+        'target_date',
+        'start_time',
+        'end_time',
+        'break1_start',
+        'break1_end',
+        'break2_start',
+        'break2_end',
+        'note',
         'status',
     ];
 

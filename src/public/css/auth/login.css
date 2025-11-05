@@ -1,3 +1,7 @@
+body {
+    background-color: #FFFFFF;
+}
+
 .login {
     max-width: 680px;
     margin: 80px auto;

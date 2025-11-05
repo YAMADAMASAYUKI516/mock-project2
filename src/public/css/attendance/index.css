@@ -11,11 +11,11 @@
 
 .attendance__status-label {
     display: inline-block;
-    background-color: #C8C8C8;
-    color: #696969;
-    font-weight: bold;
-    font-size: 18px;
     padding: 5px 14px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #696969;
+    background-color: #C8C8C8;
     border-radius: 50px;
     letter-spacing: 0.15em;
 }
@@ -34,37 +34,29 @@
 .attendance__buttons {
     display: flex;
     justify-content: center;
-    gap: 100px;
     flex-wrap: wrap;
+    gap: 100px;
 }
 
 .attendance__button {
+    min-width: 220px;
+    padding: 14px 28px;
     font-size: 32px;
     font-weight: bold;
     border: none;
     border-radius: 20px;
-    padding: 14px 28px;
     cursor: pointer;
     transition: all 0.3s;
-    min-width: 220px;
     letter-spacing: 0.2em;
 }
 
-.attendance__button--start {
-    background-color: #000000;
-    color: #FFFFFF;
-}
-
+.attendance__button--start,
 .attendance__button--end {
     background-color: #000000;
     color: #FFFFFF;
 }
 
-.attendance__button--break-start {
-    background-color: #FFFFFF;
-    color: #000000;
-}
-
+.attendance__button--break-start,
 .attendance__button--break-end {
     background-color: #FFFFFF;
     color: #000000;
@@ -75,7 +67,7 @@
 }
 
 .attendance__message {
+    margin-top: 20px;
     font-size: 26px;
     font-weight: bold;
-    margin-top: 20px;
 }

@@ -16,8 +16,10 @@ class Attendance extends Model
         'work_date',
         'start_time',
         'end_time',
-        'break_start',
-        'break_end',
+        'break1_start',
+        'break1_end',
+        'break2_start',
+        'break2_end',
         'total_work_time',
         'note',
     ];
