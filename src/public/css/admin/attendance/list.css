@@ -1,0 +1,120 @@
+.admin-attendance-list {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 100px 20px;
+}
+
+.admin-attendance-list__title {
+    margin-bottom: 30px;
+    padding-left: 10px;
+    border-left: 8px solid #000000;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.admin-attendance-list__date-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    padding: 30px;
+    height: 60px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.admin-attendance-list__arrow-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    color: #737373;
+}
+
+.admin-attendance-list__arrow-icon {
+    width: 20px;
+    height: 15px;
+}
+
+.admin-attendance-list__arrow-icon--next {
+    transform: rotate(180deg);
+}
+
+.admin-attendance-list__calendar-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.admin-attendance-list__date-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: default;
+}
+
+.admin-attendance-list__table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #737373;
+}
+
+.admin-attendance-list__table thead {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.admin-attendance-list__table th,
+.admin-attendance-list__table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.admin-attendance-list__table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-attendance-list__table a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-attendance-list__date-picker {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.admin-attendance-list__calendar-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.admin-attendance-list__date-label {
+    font-size: 20px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.admin-attendance-list__date-input {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    opacity: 0;
+    width: 140px;
+    height: 40px;
+    z-index: 10;
+    pointer-events: all;
+}
