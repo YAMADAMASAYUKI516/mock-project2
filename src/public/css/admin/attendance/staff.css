@@ -1,0 +1,122 @@
+.admin-attendance-staff {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 100px 20px;
+}
+
+.admin-attendance-staff__title {
+    margin-bottom: 30px;
+    padding-left: 10px;
+    border-left: 8px solid #000000;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.admin-attendance-staff__month-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    padding: 30px;
+    height: 60px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.admin-attendance-staff__arrow-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #737373;
+    cursor: pointer;
+}
+
+.admin-attendance-staff__arrow-icon {
+    width: 20px;
+    height: 15px;
+}
+
+.admin-attendance-staff__arrow-icon--next {
+    transform: rotate(180deg);
+}
+
+.admin-attendance-staff__calendar-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.admin-attendance-staff__month-picker {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.admin-attendance-staff__month-label {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.admin-attendance-staff__month-input {
+    position: absolute;
+    opacity: 0;
+    width: 120px;
+    height: 40px;
+    z-index: 10;
+}
+
+.admin-attendance-staff__table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #737373;
+    letter-spacing: 0.1em;
+}
+
+.admin-attendance-staff__table thead {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.admin-attendance-staff__table th,
+.admin-attendance-staff__table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.admin-attendance-staff__table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-attendance-staff__table a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-attendance-staff__export {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.admin-attendance-staff__export-button {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.2em;
+}

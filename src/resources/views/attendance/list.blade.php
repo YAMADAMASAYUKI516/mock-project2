@@ -54,28 +54,51 @@
         <tbody>
             @foreach ($datesInMonth as $date)
                 @php
-                    $attendance = $attendances[$date->format('Y-m-d')] ?? null;
-                    $weekday = ['日','月','火','水','木','金','土'][$date->dayOfWeek];
+                    $dateKey = $date->format('Y-m-d');
+                    $attendance = $attendances[$dateKey] ?? null;
+                    $request = $requests[$dateKey] ?? null;
+                    $weekday = ['日','月','火','水','木','金','木','土'][$date->dayOfWeek];
+
+                    $startTime = $attendance?->start_time ?? $request?->start_time;
+                    $endTime = $attendance?->end_time ?? $request?->end_time;
+
+                    $breakMinutes = 0;
+                    if (($attendance?->break1_start && $attendance?->break1_end) || ($request?->break1_start && $request?->break1_end)) {
+                        $start1 = $attendance?->break1_start ?? $request?->break1_start;
+                        $end1   = $attendance?->break1_end ?? $request?->break1_end;
+                        $breakMinutes += \Carbon\Carbon::parse($start1)->diffInMinutes(\Carbon\Carbon::parse($end1));
+                    }
+                    if (($attendance?->break2_start && $attendance?->break2_end) || ($request?->break2_start && $request?->break2_end)) {
+                        $start2 = $attendance?->break2_start ?? $request?->break2_start;
+                        $end2   = $attendance?->break2_end ?? $request?->break2_end;
+                        $breakMinutes += \Carbon\Carbon::parse($start2)->diffInMinutes(\Carbon\Carbon::parse($end2));
+                    }
+                    $breakTime = $breakMinutes > 0 ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60) : '';
+
+                    if ($startTime && $endTime) {
+                        $workMinutes = \Carbon\Carbon::parse($startTime)->diffInMinutes(\Carbon\Carbon::parse($endTime)) - $breakMinutes;
+                        $totalTime = sprintf('%d:%02d', intdiv($workMinutes, 60), $workMinutes % 60);
+                    } else {
+                        $totalTime = '';
+                    }
                 @endphp
                 <tr>
                     <td>{{ $date->format('m/d') }}({{ $weekday }})</td>
-
-                    @if ($attendance)
-                        <td>{{ $attendance->start_time ? $attendance->start_time->format('H:i') : '-' }}</td>
-                        <td>{{ $attendance->end_time ? $attendance->end_time->format('H:i') : '-' }}</td>
-                        <td>{{ $attendance->break_time_formatted }}</td>
-                        <td>{{ $attendance->total_time_formatted }}</td>
-                        <td><a href="{{ route('attendance.detail', $attendance->id) }}">詳細</a></td>
-                    @else
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><a href="{{ route('attendance.detail_by_date', ['date' => $date->format('Y-m-d')]) }}">詳細</a></td>
-                    @endif
+                    <td>{{ $startTime ? \Carbon\Carbon::parse($startTime)->format('H:i') : '' }}</td>
+                    <td>{{ $endTime ? \Carbon\Carbon::parse($endTime)->format('H:i') : '' }}</td>
+                    <td>{{ $breakTime }}</td>
+                    <td>{{ $totalTime }}</td>
+                    <td>
+                        @if ($attendance)
+                            <a href="{{ route('attendance.detail', $attendance->id) }}">詳細</a>
+                        @else
+                            <a href="{{ route('attendance.detail_by_date', ['date' => $dateKey]) }}">詳細</a>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
+
     </table>
 </div>
 @endsection

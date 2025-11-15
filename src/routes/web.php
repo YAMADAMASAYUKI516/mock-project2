@@ -29,8 +29,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
         Route::get('list', [AttendanceController::class, 'list'])->name('list');
         Route::get('detail/{id}', [AttendanceController::class, 'detail'])->name('detail');
-        Route::get('detail', [AttendanceController::class, 'detailByDate'])->name('detail_by_date');
-        Route::post('request/{id}', [AttendanceController::class, 'request'])->name('request');
+        Route::get('detail-by-date/{date}', [AttendanceController::class, 'detailByDate'])->name('detail_by_date');
+        Route::match(['post', 'put'], 'request/{id}', [AttendanceController::class, 'request'])->name('request');
+        Route::post('request-by-date/{date}', [AttendanceController::class, 'requestByDate'])->name('request_by_date');
     });
 
     Route::get('/request/list', [RequestController::class, 'list'])->name('request.list');
@@ -59,11 +60,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('attendance.list');
-        Route::get('/attendance/{id}', [AdminAttendanceController::class, 'detail'])->name('attendance.detail');
+        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'detail'])->name('attendance.detail');
+        Route::get('/attendance/detail-by-date/{user_id}/{date}', [AdminAttendanceController::class, 'detailByDate'])->name('attendance.detail_by_date');
         Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staff'])->name('attendance.staff');
+        Route::get('/attendance/{id}/export', [AdminAttendanceController::class, 'exportCsv'])->name('attendance.export');
 
         Route::get('/request/list', [AdminRequestController::class, 'list'])->name('request.list');
-        Route::post('/request/approve/{id}', [AdminRequestController::class, 'approve'])->name('request.approve');
+        Route::match(['get', 'post'], '/request/approve/{id}', [AdminRequestController::class, 'approve'])->name('request.approve');
 
         Route::get('/staff/list', [AdminStaffController::class, 'list'])->name('staff.list');
 
