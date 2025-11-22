@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
-
     public function list()
     {
-        $staffs = User::where('name', false)->get();
+        $staffs = User::orderBy('id')->get();
 
         return view('admin.staff.list', compact('staffs'));
     }

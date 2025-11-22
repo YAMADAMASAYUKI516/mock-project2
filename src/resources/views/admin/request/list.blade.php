@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/request/list.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/request/list.css') }}">
 @endsection
 
 @section('content')
@@ -9,15 +9,17 @@
     <h2 class="request-list__title">申請一覧</h2>
 
     <div class="request-list__tabs">
+
         <a href="{{ route('admin.request.list', ['status' => 'pending']) }}"
-        class="request-list__tab {{ $status === 'pending' ? 'active' : '' }}">
+           class="request-list__tab {{ $status === 'pending' ? 'active' : '' }}">
             承認待ち
         </a>
 
         <a href="{{ route('admin.request.list', ['status' => 'approved']) }}"
-        class="request-list__tab {{ $status === 'approved' ? 'active' : '' }}">
+           class="request-list__tab {{ $status === 'approved' ? 'active' : '' }}">
             承認済み
         </a>
+
     </div>
 
     <table class="request-list__table">
@@ -35,11 +37,21 @@
         <tbody>
             @foreach ($requests as $request)
                 <tr>
-                    <td>{{ $request->status === 'pending' ? '承認待ち' : '承認済み' }}</td>
+                    <td>
+                        {{ $request->status === 'pending' ? '承認待ち' : '承認済み' }}
+                    </td>
+
                     <td>{{ $request->user->name }}</td>
-                    <td class="date">{{ \Carbon\Carbon::parse($request->target_date)->format('Y/m/d') }}</td>
+
+                    <td class="date">
+                        {{ \Carbon\Carbon::parse($request->target_date)->format('Y/m/d') }}
+                    </td>
+
                     <td>{{ $request->note }}</td>
-                    <td class="date">{{ \Carbon\Carbon::parse($request->requested_date)->format('Y/m/d') }}</td>
+
+                    <td class="date">
+                        {{ \Carbon\Carbon::parse($request->requested_date)->format('Y/m/d') }}
+                    </td>
 
                     <td>
                         <a href="{{ route('admin.request.approve', $request->id) }}">

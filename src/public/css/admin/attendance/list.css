@@ -56,6 +56,7 @@
     font-size: 20px;
     font-weight: bold;
     cursor: default;
+    white-space: nowrap;
 }
 
 .admin-attendance-list__table {
@@ -94,18 +95,6 @@
     align-items: center;
     cursor: pointer;
     position: relative;
-}
-
-.admin-attendance-list__calendar-icon {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-}
-
-.admin-attendance-list__date-label {
-    font-size: 20px;
-    font-weight: bold;
-    white-space: nowrap;
 }
 
 .admin-attendance-list__date-input {

@@ -6,8 +6,8 @@
 
 @section('content')
 @include('attendance.detail', [
-    'attendance' => $attendance,
-    'requestData' => $requestData,
-    'isEditable' => $isEditable
+    'attendance'  => $attendance,
+    'requestData' => $requestData ?? null,
+    'isEditable'  => true,  {{-- 管理者は常に編集可能 --}}
 ])
 @endsection

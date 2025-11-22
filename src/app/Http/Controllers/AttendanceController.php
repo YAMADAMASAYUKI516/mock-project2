@@ -134,75 +134,75 @@ class AttendanceController extends Controller
         return '勤務外';
     }
 
-public function list(Request $request)
-{
-    $user = Auth::user();
-    $currentMonth = $request->input('month', now()->format('Y-m'));
+    public function list(Request $request)
+    {
+        $user = Auth::user();
+        $currentMonth = $request->input('month', now()->format('Y-m'));
 
-    $startOfMonth = Carbon::parse($currentMonth . '-01')->startOfMonth();
-    $endOfMonth   = $startOfMonth->copy()->endOfMonth();
+        $startOfMonth = Carbon::parse($currentMonth . '-01')->startOfMonth();
+        $endOfMonth   = $startOfMonth->copy()->endOfMonth();
 
-    $prevMonth = $startOfMonth->copy()->subMonth()->format('Y-m');
-    $nextMonth = $startOfMonth->copy()->addMonth()->format('Y-m');
+        $prevMonth = $startOfMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $startOfMonth->copy()->addMonth()->format('Y-m');
 
-    $datesInMonth = collect(CarbonPeriod::create($startOfMonth, $endOfMonth));
+        $datesInMonth = collect(CarbonPeriod::create($startOfMonth, $endOfMonth));
 
-    $attendances = Attendance::where('user_id', $user->id)
-        ->whereBetween('work_date', [$startOfMonth, $endOfMonth])
-        ->orderBy('work_date')
-        ->get()
-        ->keyBy(fn($a) => Carbon::parse($a->work_date)->format('Y-m-d'));
+        $attendances = Attendance::where('user_id', $user->id)
+            ->whereBetween('work_date', [$startOfMonth, $endOfMonth])
+            ->orderBy('work_date')
+            ->get()
+            ->keyBy(fn($a) => Carbon::parse($a->work_date)->format('Y-m-d'));
 
-        $requests = DB::table('requests')
-        ->leftJoin('attendances', 'requests.attendance_id', '=', 'attendances.id')
-        ->where(function ($query) use ($user) {
-            $query->where('attendances.user_id', $user->id)
-                ->orWhereNull('requests.attendance_id');
-        })
-        ->whereBetween('attendances.work_date', [$startOfMonth, $endOfMonth])
-        ->orderBy('attendances.work_date')
-        ->select('requests.*', 'attendances.work_date')
-        ->get()
-        ->keyBy(fn($r) => \Carbon\Carbon::parse($r->work_date)->format('Y-m-d'));
+            $requests = DB::table('requests')
+            ->leftJoin('attendances', 'requests.attendance_id', '=', 'attendances.id')
+            ->where(function ($query) use ($user) {
+                $query->where('attendances.user_id', $user->id)
+                    ->orWhereNull('requests.attendance_id');
+            })
+            ->whereBetween('attendances.work_date', [$startOfMonth, $endOfMonth])
+            ->orderBy('attendances.work_date')
+            ->select('requests.*', 'attendances.work_date')
+            ->get()
+            ->keyBy(fn($r) => \Carbon\Carbon::parse($r->work_date)->format('Y-m-d'));
 
-    $weekdayMap = ['日', '月', '火', '水', '木', '金', '土'];
+        $weekdayMap = ['日', '月', '火', '水', '木', '金', '土'];
 
-    foreach ($attendances as $attendance) {
-        foreach (['work_date', 'start_time', 'end_time', 'break1_start', 'break1_end', 'break2_start', 'break2_end'] as $field) {
-            $attendance->$field = $attendance->$field ? Carbon::parse($attendance->$field) : null;
+        foreach ($attendances as $attendance) {
+            foreach (['work_date', 'start_time', 'end_time', 'break1_start', 'break1_end', 'break2_start', 'break2_end'] as $field) {
+                $attendance->$field = $attendance->$field ? Carbon::parse($attendance->$field) : null;
+            }
+
+            $attendance->weekday = $weekdayMap[$attendance->work_date->dayOfWeek];
+
+            if ($attendance->total_work_time !== null) {
+                $h = floor($attendance->total_work_time);
+                $m = round(($attendance->total_work_time - $h) * 60);
+                $attendance->total_time_formatted = sprintf('%d:%02d', $h, $m);
+            } else {
+                $attendance->total_time_formatted = '-';
+            }
+
+            $breakMinutes = 0;
+            if ($attendance->break1_start && $attendance->break1_end) {
+                $breakMinutes += $attendance->break1_start->diffInMinutes($attendance->break1_end);
+            }
+            if ($attendance->break2_start && $attendance->break2_end) {
+                $breakMinutes += $attendance->break2_start->diffInMinutes($attendance->break2_end);
+            }
+            $attendance->break_time_formatted = sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60);
         }
 
-        $attendance->weekday = $weekdayMap[$attendance->work_date->dayOfWeek];
-
-        if ($attendance->total_work_time !== null) {
-            $h = floor($attendance->total_work_time);
-            $m = round(($attendance->total_work_time - $h) * 60);
-            $attendance->total_time_formatted = sprintf('%d:%02d', $h, $m);
-        } else {
-            $attendance->total_time_formatted = '-';
-        }
-
-        $breakMinutes = 0;
-        if ($attendance->break1_start && $attendance->break1_end) {
-            $breakMinutes += $attendance->break1_start->diffInMinutes($attendance->break1_end);
-        }
-        if ($attendance->break2_start && $attendance->break2_end) {
-            $breakMinutes += $attendance->break2_start->diffInMinutes($attendance->break2_end);
-        }
-        $attendance->break_time_formatted = sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60);
+        return view('attendance.list', [
+            'attendances' => $attendances,
+            'requests' => $requests,
+            'datesInMonth' => $datesInMonth,
+            'currentMonth' => $currentMonth,
+            'currentMonthDisplay' => $startOfMonth->format('Y/m'),
+            'currentMonthValue' => $currentMonth,
+            'prevMonth' => $prevMonth,
+            'nextMonth' => $nextMonth,
+        ]);
     }
-
-    return view('attendance.list', [
-        'attendances' => $attendances,
-        'requests' => $requests,
-        'datesInMonth' => $datesInMonth,
-        'currentMonth' => $currentMonth,
-        'currentMonthDisplay' => $startOfMonth->format('Y/m'),
-        'currentMonthValue' => $currentMonth,
-        'prevMonth' => $prevMonth,
-        'nextMonth' => $nextMonth,
-    ]);
-}
 
     public function detail($id)
     {

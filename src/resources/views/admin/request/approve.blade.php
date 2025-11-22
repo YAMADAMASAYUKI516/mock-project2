@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/attendance/detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/attendance/detail.css') }}">
 @endsection
 
 @section('content')
@@ -17,7 +17,9 @@
             <th>名前</th>
             <td colspan="3" class="attendance-detail__span">
                 <div class="attendance-detail__span-grid">
-                    <div class="attendance-detail__span-col1">{{ $attendance->user->name }}</div>
+                    <div class="attendance-detail__span-col1">
+                        {{ $attendance->user->name }}
+                    </div>
                 </div>
             </td>
         </tr>
@@ -34,11 +36,27 @@
         <tr>
             <th>出勤・退勤</th>
             <td>
-                <span>{{ optional($requestData->start_time ? Carbon::parse($requestData->start_time) : $attendance->start_time)->format('H:i') }}</span>
+                <span>
+                    {{
+                        optional(
+                            $requestData->start_time
+                                ? Carbon::parse($requestData->start_time)
+                                : $attendance->start_time
+                        )->format('H:i')
+                    }}
+                </span>
             </td>
             <td>〜</td>
             <td>
-                <span>{{ optional($requestData->end_time ? Carbon::parse($requestData->end_time) : $attendance->end_time)->format('H:i') }}</span>
+                <span>
+                    {{
+                        optional(
+                            $requestData->end_time
+                                ? Carbon::parse($requestData->end_time)
+                                : $attendance->end_time
+                        )->format('H:i')
+                    }}
+                </span>
             </td>
         </tr>
 
@@ -46,42 +64,76 @@
         @php
             $showBreak1 =
                 $requestData?->break1_start ||
-                $requestData?->break1_end ||
+                $requestData?->break1_end   ||
                 $attendance?->break1_start ||
                 $attendance?->break1_end;
         @endphp
+
         @if ($showBreak1)
-        <tr>
-            <th>休憩</th>
-            <td>
-                <span>{{ optional($requestData->break1_start ? Carbon::parse($requestData->break1_start) : $attendance->break1_start)->format('H:i') }}</span>
-            </td>
-            <td>〜</td>
-            <td>
-                <span>{{ optional($requestData->break1_end ? Carbon::parse($requestData->break1_end) : $attendance->break1_end)->format('H:i') }}</span>
-            </td>
-        </tr>
+            <tr>
+                <th>休憩</th>
+                <td>
+                    <span>
+                        {{
+                            optional(
+                                $requestData->break1_start
+                                    ? Carbon::parse($requestData->break1_start)
+                                    : $attendance->break1_start
+                            )->format('H:i')
+                        }}
+                    </span>
+                </td>
+                <td>〜</td>
+                <td>
+                    <span>
+                        {{
+                            optional(
+                                $requestData->break1_end
+                                    ? Carbon::parse($requestData->break1_end)
+                                    : $attendance->break1_end
+                            )->format('H:i')
+                        }}
+                    </span>
+                </td>
+            </tr>
         @endif
 
         {{-- 休憩2 --}}
         @php
             $showBreak2 =
                 $requestData?->break2_start ||
-                $requestData?->break2_end ||
+                $requestData?->break2_end   ||
                 $attendance?->break2_start ||
                 $attendance?->break2_end;
         @endphp
+
         @if ($showBreak2)
-        <tr>
-            <th>休憩2</th>
-            <td>
-                <span>{{ optional($requestData->break2_start ? Carbon::parse($requestData->break2_start) : $attendance->break2_start)->format('H:i') }}</span>
-            </td>
-            <td>〜</td>
-            <td>
-                <span>{{ optional($requestData->break2_end ? Carbon::parse($requestData->break2_end) : $attendance->break2_end)->format('H:i') }}</span>
-            </td>
-        </tr>
+            <tr>
+                <th>休憩2</th>
+                <td>
+                    <span>
+                        {{
+                            optional(
+                                $requestData->break2_start
+                                    ? Carbon::parse($requestData->break2_start)
+                                    : $attendance->break2_start
+                            )->format('H:i')
+                        }}
+                    </span>
+                </td>
+                <td>〜</td>
+                <td>
+                    <span>
+                        {{
+                            optional(
+                                $requestData->break2_end
+                                    ? Carbon::parse($requestData->break2_end)
+                                    : $attendance->break2_end
+                            )->format('H:i')
+                        }}
+                    </span>
+                </td>
+            </tr>
         @endif
 
         {{-- 備考 --}}
@@ -98,14 +150,22 @@
 
     </table>
 
-    {{-- 承認ボタン --}}
+    {{-- 承認ボタン・承認済み --}}
     @if ($requestData->status === 'pending')
-        <form action="{{ route('admin.request.approve', $requestData->id) }}" method="POST" class="attendance-detail__submit-wrapper">
+        <form
+            action="{{ route('admin.request.approve', $requestData->id) }}"
+            method="POST"
+            class="attendance-detail__submit-wrapper"
+        >
             @csrf
-            <button type="submit" class="attendance-detail__submit-button">承認</button>
+            <button type="submit" class="attendance-detail__submit-button">
+                承認
+            </button>
         </form>
     @else
-        <p class="attendance-detail__notice">承認済み</p>
+        <div class="attendance-detail__submit-wrapper">
+            <p class="admin-approve__approved">承認済み</p>
+        </div>
     @endif
 
 </div>

@@ -58,4 +58,80 @@ class AttendanceFactory extends Factory
             'note' => $this->faker->randomElement($notes),
         ];
     }
+
+    /**
+     * ▼ テスト用の初期状態
+     */
+    public function testState(): static
+    {
+        return $this->state(function () {
+            return [
+                'work_date'      => '2025-11-20',
+                'start_time'     => null,
+                'end_time'       => null,
+                'break1_start'   => null,
+                'break1_end'     => null,
+                'break2_start'   => null,
+                'break2_end'     => null,
+                'total_work_time' => null,
+                'note'           => null,
+            ];
+        });
+    }
+
+    /**
+     * ▼ テストで "出勤中" を生成する
+     */
+    public function working(): static
+    {
+        return $this->state(function () {
+            return [
+                'start_time' => '10:00:00',
+                'end_time' => null,
+            ];
+        });
+    }
+
+    /**
+     * ▼ テストで "休憩中（1回目）" を生成する
+     */
+    public function break1(): static
+    {
+        return $this->state(function () {
+            return [
+                'start_time'    => '10:00:00',
+                'break1_start'  => '11:00:00',
+                'break1_end'    => null,
+            ];
+        });
+    }
+
+    /**
+     * ▼ テストで "休憩中（2回目）" を生成する
+     */
+    public function break2(): static
+    {
+        return $this->state(function () {
+            return [
+                'start_time'    => '10:00:00',
+                'break1_start'  => '11:00:00',
+                'break1_end'    => '11:30:00',
+                'break2_start'  => '14:00:00',
+                'break2_end'    => null,
+            ];
+        });
+    }
+
+    /**
+     * ▼ テストで "退勤済" を生成する
+     */
+    public function finished(): static
+    {
+        return $this->state(function () {
+            return [
+                'start_time' => '10:00:00',
+                'end_time'   => '18:00:00',
+            ];
+        });
+    }
 }

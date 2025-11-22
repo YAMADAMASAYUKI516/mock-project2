@@ -3,38 +3,56 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\RequestController;
+
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 
-// 一般ユーザー向け：認証前
+
+// ==============================
+// 一般ユーザー（認証前）
+// ==============================
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-// 一般ユーザー向け：認証後
+
+// ==============================
+// 一般ユーザー（認証後）
+// ==============================
 Route::middleware(['auth'])->group(function () {
+
+    // 勤怠
     Route::prefix('attendance')->name('attendance.')->group(function () {
+
         Route::get('index', [AttendanceController::class, 'index'])->name('index');
         Route::post('start', [AttendanceController::class, 'start'])->name('start');
-        Route::post('end', [AttendanceController::class, 'end'])->name('end');
+        Route::post('end',   [AttendanceController::class, 'end'])->name('end');
+
         Route::post('break/start', [AttendanceController::class, 'breakStart'])->name('break.start');
-        Route::post('break/end', [AttendanceController::class, 'breakEnd'])->name('break.end');
+        Route::post('break/end',   [AttendanceController::class, 'breakEnd'])->name('break.end');
+
         Route::get('list', [AttendanceController::class, 'list'])->name('list');
+
         Route::get('detail/{id}', [AttendanceController::class, 'detail'])->name('detail');
         Route::get('detail-by-date/{date}', [AttendanceController::class, 'detailByDate'])->name('detail_by_date');
+
         Route::match(['post', 'put'], 'request/{id}', [AttendanceController::class, 'request'])->name('request');
         Route::post('request-by-date/{date}', [AttendanceController::class, 'requestByDate'])->name('request_by_date');
     });
 
+    // 申請一覧
     Route::get('/request/list', [RequestController::class, 'list'])->name('request.list');
+
+    // ログアウト
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // メール認証
@@ -53,23 +71,36 @@ Route::middleware(['auth'])->group(function () {
     })->middleware(['throttle:6,1'])->name('verification.resend');
 });
 
-// 管理者用
+
+// ==============================
+// 管理者
+// ==============================
 Route::prefix('admin')->name('admin.')->group(function () {
+
+    // ログイン
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit');
 
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('attendance.list');
-        Route::get('/attendance/detail/{id}', [AdminAttendanceController::class, 'detail'])->name('attendance.detail');
-        Route::get('/attendance/detail-by-date/{user_id}/{date}', [AdminAttendanceController::class, 'detailByDate'])->name('attendance.detail_by_date');
-        Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staff'])->name('attendance.staff');
-        Route::get('/attendance/{id}/export', [AdminAttendanceController::class, 'exportCsv'])->name('attendance.export');
 
+        // 勤怠
+        Route::get('/attendance/list',                [AdminAttendanceController::class, 'list'])->name('attendance.list');
+        Route::get('/attendance/detail/{id}',         [AdminAttendanceController::class, 'detail'])->name('attendance.detail');
+        Route::get('/attendance/detail-by-date/{user_id}/{date}', [AdminAttendanceController::class, 'detailByDate'])->name('attendance.detail_by_date');
+
+        Route::put('/attendance/update/{id}', [AdminAttendanceController::class, 'update'])->name('attendance.update');
+
+        Route::get('/attendance/staff/{id}',    [AdminAttendanceController::class, 'staff'])->name('attendance.staff');
+        Route::get('/attendance/{id}/export',   [AdminAttendanceController::class, 'exportCsv'])->name('attendance.export');
+
+        // 修正申請
         Route::get('/request/list', [AdminRequestController::class, 'list'])->name('request.list');
         Route::match(['get', 'post'], '/request/approve/{id}', [AdminRequestController::class, 'approve'])->name('request.approve');
 
+        // スタッフ一覧
         Route::get('/staff/list', [AdminStaffController::class, 'list'])->name('staff.list');
 
+        // ログアウト
         Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     });
 });

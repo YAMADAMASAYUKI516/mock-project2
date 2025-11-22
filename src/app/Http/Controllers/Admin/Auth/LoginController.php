@@ -23,9 +23,11 @@ class LoginController extends Controller
             return redirect()->route('admin.attendance.list');
         }
 
-        return back()->withErrors([
-            'email' => 'ログイン情報が正しくありません。',
-        ])->onlyInput('email');
+        return back()
+            ->withErrors([
+                'email' => 'ログイン情報が正しくありません',
+            ])
+            ->onlyInput('email');
     }
 
     public function logout(Request $request)
