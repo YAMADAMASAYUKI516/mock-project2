@@ -113,6 +113,23 @@ php artisan test
 パスワード：password
 ```
 
+## ダミーデータの一般ユーザー一覧
+
+```text
+パスワード（全員）：password
+
+宮阪 奈緒美 => naomi.m@coachtech.com
+齋藤 慶     => kei.s@coachtech.com
+井原 有沙   => arisa.i@coachtech.com
+熊谷 恵     => megumi.k@coachtech.com
+上野 哲郎   => tetsuro.u@coachtech.com
+五味 彩子   => saiko.g@coachtech.com
+井上 ゆかり => yukari.i@coachtech.com
+清水 祥吾   => syogo.s@coachtech.com
+高橋 勉     => tsutomu.t@coachtech.com
+櫻井 新一郎 => sinichiro.s@coachtech.com
+```
+
 ## 使用技術(実行環境)
 
 - PHP8.3.0
