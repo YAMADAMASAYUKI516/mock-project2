@@ -57,49 +57,32 @@ class AttendanceController extends Controller
         return view('admin.attendance.detail', compact('attendance', 'requestData', 'isEditable'));
     }
 
-    public function detailByDate($user_id, $date)
-    {
-        $attendance = Attendance::where('user_id', $user_id)
-            ->whereDate('work_date', $date)
-            ->with('user')
-            ->first();
+public function detailByDate($user_id, $date)
+{
+    $attendance = Attendance::where('user_id', $user_id)
+        ->whereDate('work_date', $date)
+        ->first();
 
-        if (!$attendance) {
-            $user = User::findOrFail($user_id);
-
-            $attendance = new Attendance([
-                'user_id'   => $user->id,
-                'work_date' => $date,
-            ]);
-
-            $attendance->user = $user;
-        }
-
-        $requestData = AttendanceRequestModel::whereHas('attendance', function ($q) use ($user_id, $date) {
-                $q->where('user_id', $user_id)
-                  ->whereDate('work_date', $date);
-            })
-            ->latest('updated_at')
-            ->first();
-
-        if ($requestData && !$attendance->id) {
-            $attendance->id = $requestData->attendance_id;
-        }
-
-        $isEditable = !$requestData || $requestData->status === 'approved';
-
-        foreach ([
-            'work_date', 'start_time', 'end_time',
-            'break1_start', 'break1_end',
-            'break2_start', 'break2_end'
-        ] as $field) {
-            if (!empty($attendance->$field)) {
-                $attendance->$field = Carbon::parse($attendance->$field);
-            }
-        }
-
-        return view('admin.attendance.detail', compact('attendance', 'isEditable', 'requestData'));
+    if (!$attendance) {
+        // 存在しなければ新規作成して ID を持たせる
+        $attendance = Attendance::create([
+            'user_id'   => $user_id,
+            'work_date' => $date,
+        ]);
     }
+
+    // 以下同じ
+    $attendance->load('user');
+
+    $requestData = AttendanceRequestModel::where('attendance_id', $attendance->id)
+        ->latest('updated_at')
+        ->first();
+
+    $isEditable = !$requestData || $requestData->status === 'approved';
+
+    return view('admin.attendance.detail', compact('attendance','requestData','isEditable'));
+}
+
 
     public function update(AdminAttendanceRequest $request, $id)
     {
